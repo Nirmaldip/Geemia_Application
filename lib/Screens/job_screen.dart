@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/job_detailed_screen.dart';
 import 'package:geemia_app/Screens/job_post_screen.dart';
 import 'package:geemia_app/Screens/resume_listing.dart';
+import 'package:geemia_app/Screens/resume_post_screen.dart';
 
 class GeemiaHomeScreen extends StatefulWidget {
   const GeemiaHomeScreen({super.key});
@@ -107,10 +108,19 @@ class _GeemiaHomeScreenState extends State<GeemiaHomeScreen> {
       padding: const EdgeInsets.all(16),
       itemCount: 2, // Replace with your dynamic data
       itemBuilder: (context, index) {
-        return _buildJobCard();
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ResumeListScreen()),
+            );
+          },
+          child: _buildJobCard(),
+        );
       },
     );
   }
+
 
   Widget _buildJobCard() {
     return Container(
@@ -172,7 +182,7 @@ class _GeemiaHomeScreenState extends State<GeemiaHomeScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => JobPostScreen()),);},
+                          MaterialPageRoute(builder: (context) => JobDetailsScreen()),);},
                       child: const Text("\$3k-6k/month", style: TextStyle(fontWeight: FontWeight.bold))),
                 ),
               ],

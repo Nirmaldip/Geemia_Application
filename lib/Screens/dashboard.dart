@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/housing_screen.dart';
 import 'package:geemia_app/Screens/job_screen.dart';
 
 import 'hooke_up_screen.dart' show IHookupScreen, SwipeScreen;
@@ -110,7 +111,11 @@ class Dashboard extends StatelessWidget {
     context,
     MaterialPageRoute(builder: (context) => MessagesScreen()),);}),
 
-                  serviceItem("Housing", Icons.home),
+                  serviceItem("Housing", Icons.home,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HousingScreen()),);}),
                   serviceItem("Wallet", Icons.account_balance_wallet),
                   serviceItem("Recording", Icons.mic),
                 ],
