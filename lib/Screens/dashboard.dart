@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/housing_screen.dart';
 import 'package:geemia_app/Screens/job_screen.dart';
+import 'package:geemia_app/Screens/market_feed_screen.dart';
 
 import 'hooke_up_screen.dart' show IHookupScreen, SwipeScreen;
 import 'menu_screen.dart';
@@ -14,59 +15,71 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       drawer: MenuScreen(), // Drawer added
       backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(140),
-          child: AppBar(
-            backgroundColor: Colors.orange,
-            elevation: 0,
-            automaticallyImplyLeading: false, // avoid default back button
-            flexibleSpace: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Builder(
-                          builder: (context) => IconButton(
-                            icon: Icon(Icons.menu, color: Colors.white, size: 28),
-                            onPressed: () => Scaffold.of(context).openDrawer(),
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          'geemia',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 26),
-                        ),
-                        Spacer(),
-                        Icon(Icons.notifications_none, size: 28, color: Colors.white),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFE5CC),
-                        borderRadius: BorderRadius.circular(30),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(140),
+        child: AppBar(
+          backgroundColor: Colors.orange,
+          elevation: 0,
+          automaticallyImplyLeading: false, // avoid default back button
+          flexibleSpace: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Builder(
+                        builder:
+                            (context) => IconButton(
+                              icon: Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                              onPressed:
+                                  () => Scaffold.of(context).openDrawer(),
+                            ),
                       ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search, color: Colors.grey),
-                          hintText: "Search services",
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      SizedBox(width: 5),
+                      Text(
+                        'geemia',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
                         ),
                       ),
+                      Spacer(),
+                      Icon(
+                        Icons.notifications_none,
+                        size: 28,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFE5CC),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                  ],
-                ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search, color: Colors.grey),
+                        hintText: "Search services",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-
-
+      ),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -77,8 +90,6 @@ class Dashboard extends StatelessWidget {
               SizedBox(height: 10),
 
               // Search Bar
-
-
               SizedBox(height: 30),
 
               // Services Grid
@@ -92,30 +103,57 @@ class Dashboard extends StatelessWidget {
                 children: [
                   serviceItem("Digital System", Icons.laptop),
                   serviceItem("Social Media", Icons.people),
-                  serviceItem("Jobs", Icons.work,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GeemiaHomeScreen()),);}),
+                  serviceItem(
+                    "Jobs",
+                    Icons.work,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GeemiaHomeScreen(),
+                        ),
+                      );
+                    },
+                  ),
 
-        serviceItem("iHookup", Icons.favorite, onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => IHookupScreen()),
-                    );
-                  }),
+                  serviceItem(
+                    "iHookup",
+                    Icons.favorite,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => IHookupScreen(),
+                        ),
+                      );
+                    },
+                  ),
 
-                  serviceItem("Market", Icons.shopping_cart,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MessagesScreen()),);}),
+                  serviceItem(
+                    "Market",
+                    Icons.shopping_cart,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MarketFeedScreen(),
+                        ),
+                      );
+                    },
+                  ),
 
-                  serviceItem("Housing", Icons.home,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HousingScreen()),);}),
+                  serviceItem(
+                    "Housing",
+                    Icons.home,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HousingScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   serviceItem("Wallet", Icons.account_balance_wallet),
                   serviceItem("Recording", Icons.mic),
                 ],
@@ -138,9 +176,15 @@ class Dashboard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Yay! You have a new message.", style: TextStyle(fontSize: 14)),
+                          Text(
+                            "Yay! You have a new message.",
+                            style: TextStyle(fontSize: 14),
+                          ),
                           SizedBox(height: 5),
-                          Text("2 hours ago", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text(
+                            "2 hours ago",
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         ],
                       ),
                     ),
@@ -184,27 +228,28 @@ class Dashboard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(15),
-    child: Container(
-    padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 30, color: Colors.orange),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 13),
-              textAlign: TextAlign.center,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 30, color: Colors.orange),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 13),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
