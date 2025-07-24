@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
 
-class SocialMediaProfileScreen extends StatelessWidget {
-  final bool showDetails = true;
+class SocialMediaProfileScreen extends StatefulWidget {
+  const SocialMediaProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SocialMediaProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<SocialMediaProfileScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Widget buildStat(String count, String label) {
+    return Column(
+      children: [
+        Text(count, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,156 +38,128 @@ class SocialMediaProfileScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          /// Top Banner with Profile Image
+          // Top Section - Banner and Avatar
           Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
-                height: 160,
-                width: double.infinity,
-                decoration: BoxDecoration(
+                height: 280,
+                decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/boy.png"),
+                    image: NetworkImage('https://i.imgur.com/BoN9kdC.png'), // Banner Image
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               Positioned(
-                top: 110,
-                left: MediaQuery.of(context).size.width / 2 - 45,
-                child: CircleAvatar(
-                  radius: 45,
-                  backgroundColor: Colors.white,
+                bottom: -50,
+                left: 0,
+                right: 0,
+                child: Center(
                   child: CircleAvatar(
-                    radius: 42,
-                    backgroundImage: AssetImage("assets/images/boy.png"),
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 47,
+                      backgroundImage: NetworkImage('https://i.imgur.com/BoN9kdC.png'), // Profile Pic
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 60),
+          const SizedBox(height: 60),
 
-          /// User Info
-          Text(
-            "Dave C. Brown",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "@dave_brown",
-            style: TextStyle(color: Colors.grey),
-          ),
-          Text(
-            "Google Certified UX/UI Designer",
-            style: TextStyle(fontSize: 13),
-          ),
-          SizedBox(height: 10),
+          // Name and Bio
+          const Text("Dave C. Brown",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          const Text("@dave_brown",
+              style: TextStyle(fontSize: 14, color: Colors.grey)),
+          const SizedBox(height: 4),
+          const Text("Google Certified UX/UI Designer",
+              style: TextStyle(fontSize: 14)),
 
-          /// Edit Profile + Settings
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: const Color(0xfff3f3f3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+            ),
+            child: const Text("EDIT PROFILE"),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Stats Row
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("EDIT PROFILE"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade200,
-                      foregroundColor: Colors.black,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                IconButton(
-                  icon: Icon(Icons.settings, color: Colors.black),
-                  onPressed: () {},
-                )
+                buildStat("100", "Post"),
+                buildStat("120", "Photos"),
+                buildStat("10k", "Followers"),
+                buildStat("64", "Following"),
               ],
             ),
           ),
-          SizedBox(height: 20),
 
-          /// Stats Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStat("100", "Post"),
-              _buildStat("120", "Photos"),
-              _buildStat("10k", "Followers"),
-              _buildStat("64", "Following"),
+          const SizedBox(height: 16),
+
+          // Tabs
+          TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.orange,
+            labelColor: Colors.orange,
+            unselectedLabelColor: Colors.black,
+            tabs: const [
+              Tab(text: "Post"),
+              Tab(text: "Details"),
             ],
           ),
-          SizedBox(height: 20),
 
-          /// Toggle Tabs (Post / Details)
-          Container(
-            height: 45,
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Row(
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
               children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade100,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Text("Post", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text("Details", style: TextStyle(color: Colors.black)),
+                // Post tab
+                Center(child: Text("Posts will appear here")),
+                // Details tab
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text("About", style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 4),
+                      Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
+                      SizedBox(height: 16),
+
+                      Text("Display Name", style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 4),
+                      Text("Jhon Abraham"),
+                      SizedBox(height: 16),
+
+                      Text("Address", style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 4),
+                      Text("35 street west subidbazar, sylhet, shahjalal"),
+                      SizedBox(height: 16),
+
+                      Text("Gender", style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 4),
+                      Text("Male"),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-
-          SizedBox(height: 20),
-
-          /// Details Section
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView(
-                children: [
-                  _buildDetailItem("About", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fringilla natoque id aenean."),
-                  _buildDetailItem("Display Name", "Jhon Abraham"),
-                  _buildDetailItem("Address", "33 street west, subidbazar, Sylhet 3100, Bangladesh"),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStat(String count, String label) {
-    return Column(
-      children: [
-        Text(count, style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(label, style: TextStyle(color: Colors.grey)),
-      ],
-    );
-  }
-
-  Widget _buildDetailItem(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(color: Colors.grey, fontSize: 12)),
-          SizedBox(height: 4),
-          Text(value, style: TextStyle(fontSize: 14)),
+          )
         ],
       ),
     );

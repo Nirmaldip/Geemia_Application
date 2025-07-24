@@ -30,7 +30,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Future<void> _pickDocument() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
-    if (result != null) {
+    if (result != null && result.files.single.path != null) {
       setState(() => selectedMedia = File(result.files.single.path!));
     }
   }
@@ -84,8 +84,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0.5,
-        leading: IconButton(icon: Icon(Icons.close, color: Colors.black), onPressed: () => Navigator.pop(context)),
+        elevation: 0.8,
+        leading: IconButton(
+          icon: Icon(Icons.close, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text('Create a post', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
           TextButton(
@@ -98,25 +101,31 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            /// Profile + Dropdown
+            /// Profile + Visibility
             Row(
               children: [
-                CircleAvatar(backgroundImage: AssetImage('assets/user.png'), radius: 22),
-                SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: visibility,
-                  underline: SizedBox(),
-                  items: ["Public", "Private"]
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  onChanged: (value) => setState(() => visibility = value!),
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/girl.png'),
+                  radius: 24,
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: visibility,
+                    underline: SizedBox(),
+                    isExpanded: true,
+                    items: ["Public", "Private"]
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (value) => setState(() => visibility = value!),
+                  ),
                 )
               ],
             ),
 
-            SizedBox(height: 12),
+            SizedBox(height: 14),
 
-            /// TextField
+            /// Post TextField
             TextField(
               controller: postTextController,
               maxLines: null,
@@ -124,17 +133,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 hintText: "What's on your mind?",
                 border: InputBorder.none,
               ),
+              style: TextStyle(fontSize: 16),
             ),
 
+            /// Media Preview
             if (selectedMedia != null) ...[
               SizedBox(height: 12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: selectedMedia!.path.endsWith(".mp4")
                     ? Container(
-                  padding: EdgeInsets.all(20),
+                  height: 180,
+                  width: double.infinity,
                   color: Colors.orange.shade100,
-                  child: Icon(Icons.videocam, size: 60, color: Colors.orange),
+                  child: Center(child: Icon(Icons.videocam, size: 60, color: Colors.orange)),
                 )
                     : Image.file(selectedMedia!, height: 180, fit: BoxFit.cover),
               ),
@@ -142,13 +154,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
             SizedBox(height: 24),
 
-            /// Features Grid
+            /// Grid Options
             GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: options.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount: 3,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 childAspectRatio: 0.75,
