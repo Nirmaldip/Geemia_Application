@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/social_media_create_post_screen.dart';
+import 'package:geemia_app/Screens/social_media_profile_screen.dart';
 
 class SocialMediaScreen extends StatelessWidget {
   const SocialMediaScreen({super.key});
@@ -24,10 +25,22 @@ class SocialMediaScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   children: const [
                     AddStoryWidget(),
-                    StoryAvatarWidget(name: "Samera", imagePath: "assets/images/doll.png"),
-                    StoryAvatarWidget(name: "Julien", imagePath: "assets/images/teena.png"),
-                    StoryAvatarWidget(name: "Mariane", imagePath: "assets/images/sam.png"),
-                    StoryAvatarWidget(name: "Alex", imagePath: "assets/images/doll.png"),
+                    StoryAvatarWidget(
+                      name: "Samera",
+                      imagePath: "assets/images/doll.png",
+                    ),
+                    StoryAvatarWidget(
+                      name: "Julien",
+                      imagePath: "assets/images/teena.png",
+                    ),
+                    StoryAvatarWidget(
+                      name: "Mariane",
+                      imagePath: "assets/images/sam.png",
+                    ),
+                    StoryAvatarWidget(
+                      name: "Alex",
+                      imagePath: "assets/images/doll.png",
+                    ),
                   ],
                 ),
               ),
@@ -61,18 +74,26 @@ class BottomNavBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children:  [
+          children: [
             Icon(Icons.home_outlined),
             IconButton(
-              icon:  Icon(Icons.add_circle_outline, size: 32),
+              icon: Icon(Icons.add_circle_outline, size: 32),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const CreatePostScreen()),
+                  MaterialPageRoute(builder: (_) => CreatePostScreen()),
                 );
               },
             ),
-            Icon(Icons.person_outline),
+            IconButton(
+              icon: Icon(Icons.person_outline),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SocialMediaProfileScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -117,10 +138,7 @@ class StoryAvatarWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundImage: AssetImage(imagePath),
-          ),
+          CircleAvatar(radius: 30, backgroundImage: AssetImage(imagePath)),
           const SizedBox(height: 6),
           Text(name, style: const TextStyle(fontSize: 12)),
         ],
@@ -153,9 +171,15 @@ class PostCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Kriston Watson", style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      "Kriston Watson",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(height: 2),
-                    Text("08:39 am", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    Text(
+                      "08:39 am",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
                   ],
                 ),
               ],

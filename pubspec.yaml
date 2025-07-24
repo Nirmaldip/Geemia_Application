@@ -38,6 +38,7 @@ dependencies:
 #  google_fonts: ^6.1.0
   flutter_card_swiper: ^7.0.0
   image_picker: ^1.0.4
+  file_picker: ^10.2.0
   camera: ^0.10.5+5
 #  file_picker: ^5.5.0
 
