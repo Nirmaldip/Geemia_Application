@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/housing_screen.dart';
 import 'package:geemia_app/Screens/job_screen.dart';
 import 'package:geemia_app/Screens/market_feed_screen.dart';
+import 'package:geemia_app/Screens/social_media_screen.dart';
 
 import 'hooke_up_screen.dart' show IHookupScreen, SwipeScreen;
 import 'menu_screen.dart';
@@ -102,7 +103,13 @@ class Dashboard extends StatelessWidget {
                 childAspectRatio: 0.9,
                 children: [
                   serviceItem("Digital System", Icons.laptop),
-                  serviceItem("Social Media", Icons.people),
+                  serviceItem("Social Media", Icons.people,
+    onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SocialMediaScreen()),);
+                      },),
                   serviceItem(
                     "Jobs",
                     Icons.work,

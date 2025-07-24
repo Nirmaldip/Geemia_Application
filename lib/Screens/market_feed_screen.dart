@@ -50,7 +50,9 @@ class MarketFeedScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.asset('assets/images/bag${index + 1}.jpg', height: 200, width: double.infinity, fit: BoxFit.cover),
+                  child: Image.asset('assets/images/headphones_one.png',
+                      // 'assets/images/bag${index + 1}.jpg',
+                      height: 200, width: double.infinity, fit: BoxFit.cover),
                 ),
                 ListTile(
                   title: const Text('Product AAA'),
