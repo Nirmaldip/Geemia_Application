@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:label="geemia_app"
@@ -40,6 +43,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="AIzaSyDMHM2YBheD9G8r3YRh4YQjFU62pCKNo54-->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDMHM2YBheD9G8r3YRh4YQjFU62pCKNo54" />
+
+<!--"/>-->
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

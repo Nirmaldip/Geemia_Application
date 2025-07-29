@@ -1,201 +1,216 @@
+// location_screen.dart
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'congrat_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:geemia_app/Screens/congrat_screen.dart';
+import 'package:geemia_app/provider/location_provider.dart';
 
 class LocationAccessScreen extends StatefulWidget {
+  const LocationAccessScreen({super.key});
+
   @override
-  _LocationAccessScreenState createState() => _LocationAccessScreenState();
+  State<LocationAccessScreen> createState() => _LocationAccessScreenState();
 }
 
 class _LocationAccessScreenState extends State<LocationAccessScreen> {
-  TextEditingController _searchController = TextEditingController();
+  final Completer<GoogleMapController> _mapController = Completer();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        title: Image.asset(
-          'assets/images/title.png',
-          height: 40,
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                'Log In',
-                style: TextStyle(
-                  fontFamily: 'ArgentumSans',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFFF8A05),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Background Map Image
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/map.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
-          // Whole content
-          SafeArea(
-            child: Column(
-              children: [
-                // Search Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  child: TextField(
-                    controller: _searchController,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'ArgentumSans',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "Search your location",
-                      hintStyle: TextStyle(
-                        fontFamily: 'ArgentumSans',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        color: Colors.black.withOpacity(0.3),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.8),
-                      prefixIcon: Icon(Icons.search, color: Colors.black.withOpacity(0.5)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-                    ),
-                  ),
-                ),
-
-                // Spacer to push button to bottom
-                Expanded(child: Container()),
-
-                // Allow Location Button
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 18, 24, 80),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _showPermissionPopup(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF8A05),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const Text(
-                        "Allow Location Access",
-                        style: TextStyle(
-                          fontFamily: 'ArgentumSans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Continue Button (Positioned)
-          Positioned(
-            bottom: 10,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 16),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CongratsScreen()),
-                  );
-                },
-                child: Text("Continue"),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<LocationProvider>(context, listen: false).getCurrentLocation();
+    });
   }
 
-  void _showPermissionPopup(BuildContext context) {
+  void _showPermissionPopup() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
-            "Allow Location Access",
-            style: TextStyle(
-              fontFamily: 'ArgentumSans',
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
+          title: const Text(
+            "Would Like to Access your Location",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          content: Text(
-            "We need your location to find services near you.",
-            style: TextStyle(
-              fontFamily: 'ArgentumSans',
-              fontSize: 14,
-            ),
+          content: const Text(
+            "Your address is being securely checked to fetch your current location.",
+            style: TextStyle(fontSize: 14),
           ),
           actions: [
             TextButton(
-              child: Text("Deny", style: TextStyle(color: Colors.black)),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pushNamed(context, '/denied'),
+              child: const Text("Don't Allow"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFF8A05),
+                backgroundColor: Colors.orange,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: Text(
-                "Allow",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                // Handle permission grant
-              },
+              onPressed: () => Navigator.pushNamed(context, '/allowed'),
+              child: const Text("OK", style: TextStyle(color: Colors.white)),
             ),
           ],
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final locationProvider = Provider.of<LocationProvider>(context);
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Google Map
+          locationProvider.selectedLocation == null
+              ? const Center(child: CircularProgressIndicator())
+              : GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: locationProvider.selectedLocation!,
+              zoom: 14,
+            ),
+            myLocationEnabled: true,
+            markers: {
+              Marker(
+                markerId: const MarkerId("selected"),
+                position: locationProvider.selectedLocation!,
+                infoWindow: const InfoWindow(title: "Selected Location"),
+              )
+            },
+            onMapCreated: (controller) {
+              if (!_mapController.isCompleted) {
+                _mapController.complete(controller);
+              }
+            },
+          ),
+
+          // Search Bar and Suggestions
+          SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 5,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        locationProvider.fetchSuggestions(value);
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "Your Location",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.search),
+                        contentPadding: EdgeInsets.symmetric(vertical: 14),
+                      ),
+                    ),
+                  ),
+                ),
+                if (locationProvider.suggestions.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 5,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: locationProvider.suggestions.length,
+                      itemBuilder: (context, index) {
+                        final suggestion = locationProvider.suggestions[index];
+                        return ListTile(
+                          title: Text(suggestion['description']),
+                          onTap: () async {
+                            await locationProvider.selectPlace(suggestion['place_id']);
+                            _searchController.text = suggestion['description'];
+                            if (_mapController.isCompleted) {
+                              final controller = await _mapController.future;
+                              controller.animateCamera(
+                                CameraUpdate.newLatLngZoom(
+                                  locationProvider.selectedLocation!,
+                                  15,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // Bottom Buttons
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: _showPermissionPopup,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      "Allow Location Access",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CongratsScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      minimumSize: const Size(double.infinity, 48),
+                    ),
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
