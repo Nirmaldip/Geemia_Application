@@ -96,7 +96,12 @@ class _MessagesScreenState extends State<MessagesScreen> with SingleTickerProvid
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(Icons.arrow_back_ios, color: Colors.black),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context); // This will navigate back
+          },
+          child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
       ),
       body: Column(
         children: [

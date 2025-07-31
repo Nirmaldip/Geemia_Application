@@ -30,7 +30,12 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(Icons.arrow_back_ios, color: Colors.black),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context); // This will navigate back
+          },
+          child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.call, color: Colors.black),

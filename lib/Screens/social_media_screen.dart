@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/dashboard.dart';
 import 'package:geemia_app/Screens/social_media_create_post_screen.dart';
 import 'package:geemia_app/Screens/social_media_profile_screen.dart';
 
@@ -75,7 +76,14 @@ class BottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(Icons.home_outlined),
+            IconButton(icon: Icon(Icons.home_outlined),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Dashboard()),
+                );
+              },
+            ),
             IconButton(
               icon: Icon(Icons.add_circle_outline, size: 32),
               onPressed: () {

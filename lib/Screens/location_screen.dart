@@ -41,7 +41,10 @@ class _LocationAccessScreenState extends State<LocationAccessScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/denied'),
+              onPressed: () {
+                Navigator.pop(context); // Dismiss dialog
+                Navigator.pushNamed(context, '/denied');
+              },
               child: const Text("Don't Allow"),
             ),
             ElevatedButton(
@@ -49,7 +52,10 @@ class _LocationAccessScreenState extends State<LocationAccessScreen> {
                 backgroundColor: Colors.orange,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              onPressed: () => Navigator.pushNamed(context, '/allowed'),
+              onPressed: () {
+                Navigator.pop(context); // Dismiss dialog
+                Navigator.pushNamed(context, '/allowed');
+              },
               child: const Text("OK", style: TextStyle(color: Colors.white)),
             ),
           ],

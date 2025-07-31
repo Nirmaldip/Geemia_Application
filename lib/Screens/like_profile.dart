@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/complete_profile_screen.dart';
 
 class LikesScreen extends StatelessWidget {
   final List<String> promoImages = [
@@ -15,11 +16,26 @@ class LikesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "geemia",
+          style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: Color(0xFFFDF5F1),
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 40),
+            SizedBox(height: 20,),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -65,7 +81,11 @@ class LikesScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to profile or upgrade screen
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => CompleteProfileScreen(),
+                  ));
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),

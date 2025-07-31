@@ -46,22 +46,39 @@ class _ProfileScreenState extends State<SocialMediaProfileScreen> with TickerPro
                 height: 280,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage('https://i.imgur.com/BoN9kdC.png'), // Banner Image
+                    image: AssetImage('assets/images/girl.png'), // Banner Image
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
+              Positioned(
+                top: 40, // Adjust based on status bar height
+                left: 16,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                  ),
+                ),
+              ),
+
+
               Positioned(
                 bottom: -50,
                 left: 0,
                 right: 0,
                 child: Center(
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: 55,
                     backgroundColor: Colors.white,
                     child: CircleAvatar(
-                      radius: 47,
-                      backgroundImage: NetworkImage('https://i.imgur.com/BoN9kdC.png'), // Profile Pic
+                      radius: 50,
+                      backgroundImage: AssetImage('assets/images/girl.png'), // Profile Pic
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/dms_details_screen_digital.dart';
 import 'package:geemia_app/Screens/housing_screen.dart';
 import 'package:geemia_app/Screens/job_screen.dart';
 import 'package:geemia_app/Screens/market_feed_screen.dart';
@@ -102,14 +103,30 @@ class Dashboard extends StatelessWidget {
                 crossAxisSpacing: 20,
                 childAspectRatio: 0.9,
                 children: [
-                  serviceItem("Digital System", Icons.laptop),
-                  serviceItem("Social Media", Icons.people,
-    onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SocialMediaScreen()),);
-                      },),
+                  serviceItem(
+                    "Digital System",
+                    Icons.laptop,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DmsDetailScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  serviceItem(
+                    "Social Media",
+                    Icons.people,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SocialMediaScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   serviceItem(
                     "Jobs",
                     Icons.work,
