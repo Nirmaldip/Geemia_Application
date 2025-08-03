@@ -4,9 +4,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geemia_app/utils/values/colors.dart';
+import 'package:geemia_app/utils/values/font_sizes.dart';
 import 'comm_utils.dart';
 
 class CommWidget {
+  static Widget buildDialogButton(String title, Function function) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        backgroundColor: primaryColor,
+        side: const BorderSide(
+          color: primaryColor,
+        ),
+        padding: EdgeInsets.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          title,
+          style: TextStyle(color: Colors.white, fontSize: FontSizes.textFont),
+        ),
+      ),
+      onPressed: () {
+        function();
+      },
+    );
+  }
   static showSnackBar(BuildContext context, String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message,style:const TextStyle(color:Colors.white)),

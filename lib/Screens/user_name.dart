@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/password_screen.dart' show CreatePasswordScreen;
 
 class CreateUsernameScreen extends StatefulWidget {
+  final String email;
+  final String otp;
+
+  const CreateUsernameScreen({
+    Key? key,
+    required this.email,
+    required this.otp,
+  }) : super(key: key);
+
   @override
   _CreateUsernameScreenState createState() => _CreateUsernameScreenState();
 }
@@ -18,6 +27,12 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
         _isFilled = _usernameController.text.isNotEmpty;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,82 +75,72 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 40),
-                      Text(
-                        "Choose your username",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+                    const Text(
+                      "Choose your username",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'ArgentumSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "This is how your name will appear in the app",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'ArgentumSans',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    TextField(
+                      controller: _usernameController,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'ArgentumSans',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Your Username",
+                        hintStyle: TextStyle(
                           fontFamily: 'ArgentumSans',
-                          fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "This is how your name will appear in the app",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'ArgentumSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ),
-                      SizedBox(height: 32),
-                      TextField(
-                        controller: _usernameController,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'ArgentumSans',
-                          fontWeight: FontWeight.w500,
                           fontSize: 16,
+                          color: Colors.black.withOpacity(0.3),
                         ),
-                        decoration: InputDecoration(
-                          hintText: "Your Username",
-                          hintStyle: TextStyle(
-                            fontFamily: 'ArgentumSans',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Colors.black.withOpacity(0.3),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                        filled: true,
+                        fillColor: Colors.grey.withOpacity(0.1),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
                         ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      'Your username is unique. You can always change it later',
-                      style: TextStyle(
-                        fontFamily: 'ArgentumSans',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFFFF8A05),
-                      ),
-                    ),
-                  ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Your username is unique. You can always change it later',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'ArgentumSans',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFFFF8A05),
                 ),
               ),
             ),
@@ -145,14 +150,24 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: _isFilled ? () {
+                  onPressed: _isFilled
+                      ? () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CreatePasswordScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => CreatePasswordScreen(
+                          email: widget.email,
+                          otp: widget.otp,
+                          username: _usernameController.text.trim(),
+                        ),
+                      ),
                     );
-                  } : null,
+                  }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFilled ? const Color(0xFFFF8A05) : Colors.black.withOpacity(0.3),
+                    backgroundColor: _isFilled
+                        ? const Color(0xFFFF8A05)
+                        : Colors.black.withOpacity(0.3),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),

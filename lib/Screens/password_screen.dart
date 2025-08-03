@@ -3,6 +3,17 @@ import 'package:flutter/material.dart';
 import 'location_screen.dart' show LocationAccessScreen;
 
 class CreatePasswordScreen extends StatefulWidget {
+  final String email;
+  final String otp;
+  final String username;
+
+  const CreatePasswordScreen({
+  required this.email,
+  required this.otp,
+  required this.username,
+  Key? key,
+  }) : super(key: key);
+
   @override
   _CreatePasswordScreenState createState() => _CreatePasswordScreenState();
 }

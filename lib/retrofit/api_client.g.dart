@@ -13,7 +13,7 @@ class _ApiClient implements ApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://uatkayaleadhub.altius.cc/api';
+    baseUrl ??= 'http://127.0.0.1:8000/api/';
   }
 
   final Dio _dio;
@@ -35,6 +35,64 @@ class _ApiClient implements ApiClient {
             .compose(
               _dio.options,
               '/test/test',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value =
+        _result.data == null ? null : JwtToken.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<JwtToken?> login(String emailId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'emailId': emailId};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>?>(_setStreamType<JwtToken>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'signup/send-code',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value =
+        _result.data == null ? null : JwtToken.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<JwtToken?> verifyOtp(VerifyOtpRequest request) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>?>(_setStreamType<JwtToken>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'signup/verify',
               queryParameters: queryParameters,
               data: _data,
             )

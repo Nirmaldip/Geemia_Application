@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/provider/api_call_provider.dart';
 import 'package:geemia_app/provider/location_provider.dart';
 import 'package:geemia_app/services/place_services.dart';
 // import 'package:geemia_app/provider/location_provider.dart';
@@ -10,9 +11,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-           create: (_) => LocationProvider(),
-           ),
+
+        ChangeNotifierProvider(create: (_) => LocationProvider(),),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
 
       ],
       child: GeemiaApp(),

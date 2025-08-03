@@ -1,13 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/user_name.dart';
+import 'package:provider/provider.dart';
+
+import '../model/verify_otp_request.dart';
+import '../provider/api_call_provider.dart';
 
 class OtpScreen extends StatefulWidget {
+  final String email;
+
+  const OtpScreen({required this.email, Key? key}) : super(key: key);
+
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController _otpController = TextEditingController();
+
+  void _onVerifyPressed() async {
+    final otpCode = _otpController.text.trim();
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    final success = await authProvider.verifyOtp(
+      context: context,
+      email: widget.email,
+      otp: otpCode,
+    );
+
+    if (success) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>  CreateUsernameScreen(email: widget.email,otp: otpCode,),
+        ),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +53,7 @@ class _OtpScreenState extends State<OtpScreen> {
           },
         ),
         centerTitle: true,
-        title: Image.asset(
-          'assets/images/title.png',
-          height: 40,
-        ),
+        title: Image.asset('assets/images/title.png', height: 40),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -50,7 +77,10 @@ class _OtpScreenState extends State<OtpScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 48,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -93,7 +123,10 @@ class _OtpScreenState extends State<OtpScreen> {
                             borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 24,
+                            horizontal: 24,
+                          ),
                         ),
                       ),
                       SizedBox(height: 24),
@@ -135,12 +168,32 @@ class _OtpScreenState extends State<OtpScreen> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final otpCode = _otpController.text.trim();
+
+                    final authProvider = Provider.of<AuthProvider>(
                       context,
-                      MaterialPageRoute(builder: (context) => CreateUsernameScreen()),
+                      listen: false,
                     );
+
+                    final isVerified = await authProvider.verifyOtp(
+                      context: context,
+                      email: widget.email,
+                      otp: otpCode,
+                    );
+
+                    if (isVerified) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  CreateUsernameScreen(email: widget.email,otp: otpCode,),
+                        ),
+                      );
+                    }
                   },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF8A05),
                     shape: RoundedRectangleBorder(

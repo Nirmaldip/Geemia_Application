@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
-
-import 'otp_screen.dart' show OtpScreen;
+import 'package:geemia_app/utils/values/comm_dialogs.dart';
+import 'package:provider/provider.dart';
+import '../provider/api_call_provider.dart';
+import 'otp_screen.dart';
+import '../utils/comm_utils.dart';
 
 class EmailEntryScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
+  EmailEntryScreen({super.key});
+
+  void _onContinue(BuildContext context) async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      await CommDialogs.showCustomDialogBox(
+        context: context,
+        title: "Email Required",
+        message: "Please enter your email address.",
+        onOkPressed: () => Navigator.pop(context),
+      );
+      return;
+    }
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.sendCode(context, email);
+
+    if (success) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => OtpScreen(email: email)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = context.watch<AuthProvider>().isLoading;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -46,13 +77,13 @@ class EmailEntryScreen extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 40),
-
-                      Text(
+                      const SizedBox(height: 40),
+                      const Text(
                         "Create your account with your email address",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -62,14 +93,12 @@ class EmailEntryScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-
-                      SizedBox(height: 32),
-
+                      const SizedBox(height: 32),
                       TextField(
                         controller: _emailController,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'ArgentumSans',
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
@@ -88,13 +117,11 @@ class EmailEntryScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 24),
                         ),
                       ),
-
-                      SizedBox(height: 100),
-
+                      const SizedBox(height: 100),
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
@@ -105,51 +132,55 @@ class EmailEntryScreen extends StatelessWidget {
                             color: Colors.black.withOpacity(0.5),
                           ),
                           children: [
-                            TextSpan(text: "By tapping 'Continue', you agree to our "),
+                            const TextSpan(
+                                text: "By tapping 'Continue', you agree to our "),
                             TextSpan(
                               text: "Terms of Service",
                               style: TextStyle(
-                                fontWeight: FontWeight.w600,  // bold
+                                fontWeight: FontWeight.w600,
                                 color: Colors.black.withOpacity(0.7),
                               ),
                             ),
-                            TextSpan(text: ", "),
+                            const TextSpan(text: ", "),
                             TextSpan(
                               text: "Privacy Policy",
                               style: TextStyle(
-                                fontWeight: FontWeight.w600,  // bold
+                                fontWeight: FontWeight.w600,
                                 color: Colors.black.withOpacity(0.7),
                               ),
                             ),
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
               child: SizedBox(
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => OtpScreen()),
-                    );
-                  },
+                  onPressed:
+                  isLoading ? null : () => _onContinue(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF8A05),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text(
+                  child: isLoading
+                      ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                      : const Text(
                     "Continue",
                     style: TextStyle(
                       fontFamily: 'ArgentumSans',
@@ -166,5 +197,4 @@ class EmailEntryScreen extends StatelessWidget {
       ),
     );
   }
-
 }
