@@ -81,7 +81,8 @@ class AuthProvider with ChangeNotifier {
         enterCode: otp,
         username: "", // will be collected later
         password: "", // will be collected later
-        location: "", // will be collected later
+        location: "",
+        role: ""// will be collected later
       );
 
       final apiClient = await RetrofitClient.getApiClient();
@@ -104,6 +105,69 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> verifySignup(
+      BuildContext context, {
+        required String name,
+        required String email,
+        required String enterCode,
+        required String username,
+        required String password,
+        required String location,
+        required String role
+      }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final isInternetAvailable = await CommUtils.isInternetAvailable;
+      if (!isInternetAvailable) {
+        await CommDialogs.showCustomDialogBox(
+          context: context,
+          title: "No Internet",
+          message: "Please check your connection.",
+          onOkPressed: () => Navigator.pop(context),
+        );
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final request = VerifyOtpRequest(
+        name: name,
+        email: email,
+        enterCode: enterCode,
+        username: username,
+        password: password,
+        location: location,
+        role: role,
+      );
+
+      final apiClient = await RetrofitClient.getApiClient();
+      final JwtToken? jwtToken = await apiClient.verifyOtp(request);
+
+      if (jwtToken != null) {
+        // Save user/token data
+        await SavedSPref.setUserData(jwtToken);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      final serverError = ServerError.withError(error: e, context: context);
+      CommUtils.printLog(44444, "API Error: $serverError");
+
+      await CommDialogs.showCustomDialogBox(
+        context: context,
+        title: "Error",
+        message: "Failed to verify signup. Please try again.",
+        onOkPressed: () => Navigator.pop(context),
+      );
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return false;
+  }
 
 
 }

@@ -6,8 +6,8 @@ import '../model/verify_otp_request.dart';
 
 part 'api_client.g.dart'; // This is required
 //Run flutter generate after url change "flutter packages pub run build_runner build"
-
-const String apiBaseUrl = "http://127.0.0.1:8000/api/";
+ const String apiBaseUrl = "http://10.5.0.75:8000/api/";
+// const String apiBaseUrl = "http://127.0.0.1:8000/api/";
 // signup/send-code
 
 @RestApi(baseUrl: apiBaseUrl)

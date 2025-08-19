@@ -8,7 +8,8 @@ import '../utils/values/saved_shared_pref.dart';
 import 'api_client.dart';
 
 class RetrofitClient {
-  static const String apiBaseUrl = "https://uatkayaleadhub.altius.cc/api";
+  // static const String apiBaseUrl = "http://127.0.0.1:8000/api/";
+  static const String apiBaseUrl = "http://10.5.0.75:8000/api/";
 
   /// Basic API client with token refresher
   static Future<ApiClient> getApiClient() async {
@@ -39,7 +40,7 @@ class RetrofitClient {
         onRequest: (options, handler) async {
           final token = await SavedSPref.getStringData(SavedSPref.accessToken);
           options.headers["Authorization"] = "Bearer $token";
-          options.headers["token"] = "20250703kayaleadhub20250703";
+          options.headers["token"] = "base64:kBYQtlpPiL0g2HQhqO5prfTBBNRp+uiskhRszVABEHQ=";
           options.headers["accept"] = "*/*";
           options.headers["Content-Type"] = "application/json";
           return handler.next(options);
@@ -73,7 +74,7 @@ class RetrofitClient {
         onRequest: (options, handler) async {
           final token = await SavedSPref.getStringData(SavedSPref.accessToken);
           options.headers["Authorization"] = "Bearer $token";
-          options.headers["token"] = "20250703kayaleadhub20250703";
+          options.headers["token"] = "base64:kBYQtlpPiL0g2HQhqO5prfTBBNRp+uiskhRszVABEHQ=";
           options.headers["accept"] = "*/*";
           options.headers["Content-Type"] = "application/json";
           return handler.next(options);
@@ -107,7 +108,7 @@ class RetrofitClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          options.headers["token"] = "20250703kayaleadhub20250703";
+          options.headers["token"] = "base64:kBYQtlpPiL0g2HQhqO5prfTBBNRp+uiskhRszVABEHQ=";
           return handler.next(options);
         },
       ),
@@ -136,7 +137,7 @@ class RetrofitClient {
         onRequest: (options, handler) {
           options.headers["Authorization"] = "Bearer $accessToken";
           options.headers["Content-Type"] = "application/json";
-          options.headers["token"] = "20250703kayaleadhub20250703";
+          options.headers["token"] = "base64:kBYQtlpPiL0g2HQhqO5prfTBBNRp+uiskhRszVABEHQ=";
           return handler.next(options);
         },
         onResponse: (response, handler) {

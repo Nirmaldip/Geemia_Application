@@ -5,6 +5,7 @@ class VerifyOtpRequest {
   final String username;
   final String password;
   final String location;
+  final String role;
 
   VerifyOtpRequest({
     required this.name,
@@ -13,6 +14,7 @@ class VerifyOtpRequest {
     required this.username,
     required this.password,
     required this.location,
+    required this.role
   });
 
   Map<String, dynamic> toJson() {
@@ -23,6 +25,12 @@ class VerifyOtpRequest {
       "username": username,
       "password": password,
       "location": location,
+      "role" : role
     };
+  }
+
+  @override
+  String toString() {
+    return 'VerifyOtpRequest{name: $name, email: $email, enterCode: $enterCode, username: $username, password: $password, location: $location}';
   }
 }

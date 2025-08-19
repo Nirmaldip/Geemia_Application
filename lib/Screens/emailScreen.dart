@@ -23,6 +23,17 @@ class EmailEntryScreen extends StatelessWidget {
       return;
     }
 
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      await CommDialogs.showCustomDialogBox(
+        context: context,
+        title: "Invalid Email",
+        message: "Please enter a valid email address.",
+        onOkPressed: () => Navigator.pop(context),
+      );
+      return;
+    }
+
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final success = await authProvider.sendCode(context, email);
 
@@ -33,6 +44,7 @@ class EmailEntryScreen extends StatelessWidget {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

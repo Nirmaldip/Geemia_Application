@@ -6,11 +6,13 @@ class CreatePasswordScreen extends StatefulWidget {
   final String email;
   final String otp;
   final String username;
+  final String role;
 
   const CreatePasswordScreen({
   required this.email,
   required this.otp,
   required this.username,
+    required this.role,
   Key? key,
   }) : super(key: key);
 
