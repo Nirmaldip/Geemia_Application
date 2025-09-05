@@ -1,13 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../retrofit/api_client.dart';
 import '../retrofit/retrofit_client.dart';
 import '../retrofit/server_error.dart';
 import '../utils/comm_utils.dart';
 import '../utils/values/saved_shared_pref.dart';
-
 
 class JwtToken{
   String access_token;

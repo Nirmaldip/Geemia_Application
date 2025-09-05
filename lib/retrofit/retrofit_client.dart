@@ -9,7 +9,7 @@ import 'api_client.dart';
 
 class RetrofitClient {
   // static const String apiBaseUrl = "http://127.0.0.1:8000/api/";
-  static const String apiBaseUrl = "http://10.5.0.75:8000/api/";
+  static const String apiBaseUrl = "https://geemia.com/api/";
 
   /// Basic API client with token refresher
   static Future<ApiClient> getApiClient() async {

@@ -8,8 +8,13 @@ class LoginEmailScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Center(child: Text("geemia", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold))),
-      ),
+        title: Center(
+        child: Image.asset(
+          'assets/images/title.png', // your logo path here
+          height: 40,
+        ),
+        // Text("geemia", style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold))),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(

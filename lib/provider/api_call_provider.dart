@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/dashboard.dart';
 import 'package:geemia_app/Screens/otp_screen.dart';
 
 import '../model/jwt_token.dart';
+import '../model/user_data.dart';
 import '../model/verify_otp_request.dart';
 import '../retrofit/api_client.dart';
 import '../retrofit/retrofit_client.dart';
@@ -18,7 +21,7 @@ class AuthProvider with ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  Future<bool> sendCode(BuildContext context, String emailId) async {
+  Future<bool> sendCode(BuildContext context, String email,) async {
     _isLoading = true;
     notifyListeners();
 
@@ -31,79 +34,55 @@ class AuthProvider with ChangeNotifier {
           message: "Please check your connection.",
           onOkPressed: () => Navigator.pop(context),
         );
-        _isLoading = false;
-        notifyListeners();
         return false;
       }
 
       final apiClient = await RetrofitClient.getApiClient();
-      final JwtToken? jwtToken = await apiClient.login(emailId);
+      final response = await apiClient.sendCode({"email": email});
 
-      if (jwtToken != null) {
-        await SavedSPref.setUserData(jwtToken);
-        _isLoading = false;
-        notifyListeners();
+      if (response.isSuccess) {
+        CommUtils.printLog(44444, "SendCode Success: ${response.message}");
         return true;
-      }
-    } catch (e) {
-      final serverError = ServerError.withError(error: e, context: context);
-      CommUtils.printLog(44444, "API Error: $serverError");
+      } else {
+        final errorMsg = response.errors?['email']?.join(', ') ??
+            response.message ??
+            "Failed to send code. Please try again.";
 
+        await CommDialogs.showCustomDialogBox(
+          context: context,
+          title: "Error",
+          message: errorMsg,
+          onOkPressed: () => Navigator.pop(context),
+        );
+        return false;
+      }
+    } on DioException catch (dioError) {
+      CommUtils.printLog(
+          44444, "Dio Error: ${dioError.response?.data ?? dioError.message}");
+
+      await CommDialogs.showCustomDialogBox(
+        context: context,
+        title: "Connection Error",
+        message: dioError.response?.data.toString() ??
+            "Unable to reach server. Please try again.",
+        onOkPressed: () => Navigator.pop(context),
+      );
+      return false;
+    } catch (e) {
+      CommUtils.printLog(44444, "Unexpected Error: $e");
       await CommDialogs.showCustomDialogBox(
         context: context,
         title: "Error",
-        message: "Failed to send code. Please try again.",
-        onOkPressed: () => Navigator.pop(context),
-      );
-    }
-
-    _isLoading = false;
-    notifyListeners();
-    return false;
-  }
-
-  Future<bool> verifyOtp({
-    required BuildContext context,
-    required String email,
-    required String otp,
-  }) async {
-    if (otp.length != 4) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a valid 4-digit OTP")),
-      );
-      return false;
-    }
-
-    try {
-      final request = VerifyOtpRequest(
-        name: "", // will be collected later
-        email: email,
-        enterCode: otp,
-        username: "", // will be collected later
-        password: "", // will be collected later
-        location: "",
-        role: ""// will be collected later
-      );
-
-      final apiClient = await RetrofitClient.getApiClient();
-      final response = await apiClient.verifyOtp(request);
-
-      if (response != null) {
-        // You can optionally store the verified email or a flag
-        return true;
-      } else {
-        throw Exception("Null response");
-      }
-    } catch (e) {
-      await CommDialogs.showCustomDialogBox(
-        context: context,
-        title: "Verification Failed",
-        message: "Invalid OTP or server error. Please try again.",
+        message: "Something went wrong. Please try again.",
         onOkPressed: () => Navigator.pop(context),
       );
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
+
 
   Future<bool> verifySignup(
       BuildContext context, {
@@ -113,7 +92,7 @@ class AuthProvider with ChangeNotifier {
         required String username,
         required String password,
         required String location,
-        required String role
+        required String role,
       }) async {
     _isLoading = true;
     notifyListeners();
@@ -127,48 +106,92 @@ class AuthProvider with ChangeNotifier {
           message: "Please check your connection.",
           onOkPressed: () => Navigator.pop(context),
         );
-        _isLoading = false;
-        notifyListeners();
         return false;
       }
 
       final request = VerifyOtpRequest(
         name: name,
         email: email,
+        role: role,
         enterCode: enterCode,
         username: username,
         password: password,
         location: location,
-        role: role,
       );
 
-      final apiClient = await RetrofitClient.getApiClient();
-      final JwtToken? jwtToken = await apiClient.verifyOtp(request);
+      debugPrint("Final VerifyOtpRequest: ${request.toJson()}");
 
-      if (jwtToken != null) {
-        // Save user/token data
-        await SavedSPref.setUserData(jwtToken);
-        _isLoading = false;
-        notifyListeners();
+      ApiClient apiClient = await RetrofitClient.getApiClient();
+      final response = await apiClient.verifyOtp(request);
+
+      debugPrint("VerifySignup Raw Response: $response");
+
+      // ✅ Case 1: If response is JwtToken
+      if (response is JwtToken && response.access_token.isNotEmpty) {
         return true;
       }
+
+      else if (response is Map<String, dynamic>) {
+        final success = response["success"] as bool? ?? false;
+        final status = response["status"]?.toString().toLowerCase();
+        final message = response["message"]?.toString().toLowerCase();
+
+        if (success || status == "ok" || (message?.contains("success") ?? false)) {
+          return true;
+        }
+      }
+
+      // ❌ If neither token nor success JSON
+      return false;
     } catch (e) {
-      final serverError = ServerError.withError(error: e, context: context);
-      CommUtils.printLog(44444, "API Error: $serverError");
-
-      await CommDialogs.showCustomDialogBox(
-        context: context,
-        title: "Error",
-        message: "Failed to verify signup. Please try again.",
-        onOkPressed: () => Navigator.pop(context),
-      );
+      debugPrint("VerifySignup Error: $e");
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
-    return false;
   }
 
+
+
+
+
+  Future<bool> authenticateUser(BuildContext context, UserData userData) async {
+    bool isInternetAvailable = await CommUtils.isInternetAvailable;
+    if (isInternetAvailable) {
+      ApiClient apiClient = await RetrofitClient.getApiClient();
+
+      final result = await apiClient.login(userData).catchError((e) async {
+        final responseFormat = ServerError.getError(error: e, context: context);
+        CommUtils.printLog(46111, "Error $e");
+        final serverError = ServerError.withError(error: e, context: context);
+        CommUtils.printLog(46121, "ServerError $serverError");
+
+        if (responseFormat?.value == ErrorConstants.ACCOUNT_LOCKED ||
+            responseFormat?.value == ErrorConstants.USER_INACTIVE) {
+          await SavedSPref.logoutUserAndNavigateToLogin(
+            context: context,
+            message: 'User account is not active',
+          );
+        }
+      });
+
+      if (result != null) {
+        // Save token & user data
+        await SavedSPref.setUserData(result);
+
+        // Navigate to dashboard
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const Dashboard()),
+              (route) => false,
+        );
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
 
 }
 

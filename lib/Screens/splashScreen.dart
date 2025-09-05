@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:geemia_app/Screens/loginScreen.dart';
+
+import 'package:flutter/material.dart';
+
+import 'enter_name_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // Dynamic data to pass
+  String userEmail = "user@example.com"; // Replace with real email from API or local storage
+  String otpCode = "123456";             // Replace with real OTP from API or local storage
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => OnboardingScreen()),
+
+    // Navigate after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => OnboardingScreen(
+            email: userEmail,
+            otpCode: otpCode,
+          ),
+        ),
       );
     });
   }
@@ -31,7 +48,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
+
 class OnboardingScreen extends StatefulWidget {
+  final String email;
+  final String otpCode;
+
+  const OnboardingScreen({Key? key, required this.email, required this.otpCode})
+      : super(key: key);
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
@@ -94,47 +118,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   letterSpacing: 1.25,
                   fontFamily: 'ArgentumSans',
                   fontWeight: FontWeight.w600,
-                  // fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-             SizedBox(height: 5),
-
-            /// SUBTITLE
+            SizedBox(height: 5),
             Text(
               data['subtitle']!,
               textAlign: TextAlign.center,
-
-              style: TextStyle(fontSize: 12, color: Colors.black.withOpacity(0.6),
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black.withOpacity(0.6),
                 fontFamily: 'ArgentumSans',
                 fontWeight: FontWeight.w400,
               ),
             ),
             SizedBox(height: 20),
-
-            /// BLACK DIVIDER LINE
-            // Container(
-            //   width: 50,
-            //   height: 4,
-            //   color: Colors.black,
-            // ),
-            // SizedBox(height: 20),
-
-            /// PHONE IMAGE (you can replace with your frame image)
             Expanded(
               child: Stack(
                 children: [
-                  // Black belt image (slightly higher and more to right)
                   Positioned(
                     top: 70,
                     right: 200,
                     child: Image.asset(
                       'assets/images/black.png',
-                       width:150,  // Increase width manually
+                      width: 150,
                       fit: BoxFit.cover,
                     ),
                   ),
-
-                  // Orange curved belt image (below black and more right)
                   Positioned(
                     top: 280,
                     left: 230,
@@ -144,9 +153,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       fit: BoxFit.contain,
                     ),
                   ),
-
-
-                  // The phone mockup (centered)
                   Align(
                     alignment: Alignment.center,
                     child: Image.asset(
@@ -155,8 +161,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-
-                  // Floating location icon (on top of phone)
                   Positioned(
                     right: 40,
                     top: 200,
@@ -184,24 +188,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-
-
-
-
-
-            /// PAGE INDICATOR
-
-
             SizedBox(height: 30),
 
             /// REGISTER BUTTON
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) => EnterNameScreen()));
-                    },
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnterNameScreen(
+                      email: widget.email,   // Dynamic email passed from Splash
+                      otpCode: widget.otpCode, // Dynamic OTP passed from Splash
+                    ),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 minimumSize: Size(double.infinity, 50),
@@ -209,23 +210,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: Text("Register", style: TextStyle(
-                  fontFamily: 'ArgentumSans',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16)),
-            ),
-
-            /// SIGN IN TEXT BUTTON
-            TextButton(
-              onPressed: () {},
-              child: Text("Sign In",
-                  style: TextStyle(
-                      color: Colors.orange,
-                      fontFamily: 'ArgentumSans',
-                      fontWeight: FontWeight.w400,
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 14)),
+              child: Text(
+                "Register",
+                style: TextStyle(
+                    fontFamily: 'ArgentumSans',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16),
+              ),
             ),
           ],
         ),
@@ -233,11 +225,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  /// PAGE INDICATOR WIDGET
   Widget buildPageIndicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4,
+      children: List.generate(
+        onboardingData.length,
             (index) => AnimatedContainer(
           duration: Duration(milliseconds: 300),
           margin: EdgeInsets.symmetric(horizontal: 5),

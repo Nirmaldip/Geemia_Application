@@ -92,7 +92,7 @@ class Dashboard extends StatelessWidget {
               SizedBox(height: 10),
 
               // Search Bar
-              SizedBox(height: 30),
+               SizedBox(height: 15),
 
               // Services Grid
               GridView.count(
@@ -263,13 +263,10 @@ class Dashboard extends StatelessWidget {
           children: [
             Icon(icon, size: 30, color: Colors.orange),
             SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 13),
-                textAlign: TextAlign.center,
-              ),
+            Text(
+              title,
+              style: TextStyle(fontSize: 13),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

@@ -195,7 +195,8 @@ class _LocationAccessScreenState extends State<LocationAccessScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => CongratsScreen(name: '', email: '', enterCode: '', username: '', password: '', location: '',role: '',),
+                          builder: (_) => CongratsScreen()
+                            // (name: '', email: '', enterCode: '', username: '', password: '', location: '',role: '',),
                         ),
                       );
                     },

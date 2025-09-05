@@ -13,7 +13,7 @@ class _ApiClient implements ApiClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.5.0.75:8000/api/';
+    baseUrl ??= 'https://geemia.com/api/';
   }
 
   final Dio _dio;
@@ -49,14 +49,41 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<JwtToken?> login(String emailId) async {
+  Future<dynamic> login(UserData userData) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'emailId': emailId};
-    _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(userData.toJson());
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'login',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<ServerResponse> sendCode(Map<String, String> body) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
     final _result = await _dio
-        .fetch<Map<String, dynamic>?>(_setStreamType<JwtToken>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<ServerResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -72,37 +99,34 @@ class _ApiClient implements ApiClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value =
-        _result.data == null ? null : JwtToken.fromJson(_result.data!);
+    final value = ServerResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<JwtToken?> verifyOtp(VerifyOtpRequest request) async {
+  Future<dynamic> verifyOtp(VerifyOtpRequest request) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(request.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>?>(_setStreamType<JwtToken>(Options(
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              'signup/verify',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value =
-        _result.data == null ? null : JwtToken.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          'signup/verify',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
     return value;
   }
 
