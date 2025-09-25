@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Screens/singup_password.dart';
+import '../../Screens/Authentication/singup_password.dart';
 import '../../model/jwt_token.dart';
 
 class SavedSPref {

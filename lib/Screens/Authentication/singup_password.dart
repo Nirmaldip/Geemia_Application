@@ -101,6 +101,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../model/user_data.dart';
+import '../../provider/api_call_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -226,21 +230,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 onPressed: () async {
                   if (!showPasswordField) {
-                    // Step 1 → Show password field after email
                     setState(() {
                       showPasswordField = true;
                     });
                   } else {
-                    // Step 2 → Call login API
-                    // Replace with Provider authenticateUser
-                    // Example:
-                    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                    // await authProvider.authenticateUser(context, UserData(
-                    //   email: emailController.text,
-                    //   password: passwordController.text,
-                    // ));
+                    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+                    try {
+                      await authProvider.authenticateUser(
+                        context,
+                        UserData(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Login failed: $e")),
+                      );
+                    }
                   }
                 },
+
+                // onPressed: () async {
+                //   if (!showPasswordField) {
+                //     // Step 1 → Show password field after email
+                //     setState(() {
+                //       showPasswordField = true;
+                //     });
+                //   } else {
+                //
+                //     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                //     await authProvider.authenticateUser(context, UserData(
+                //       email: emailController.text,
+                //       password: passwordController.text,
+                //     ));
+                //   }
+                // },
                 child: Center(
                   child: Text(
                     "Continue",

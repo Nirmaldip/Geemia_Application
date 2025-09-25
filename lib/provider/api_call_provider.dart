@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/dashboard.dart';
-import 'package:geemia_app/Screens/otp_screen.dart';
+import 'package:geemia_app/Screens/Authentication/otp_screen.dart';
 
 import '../model/jwt_token.dart';
 import '../model/user_data.dart';
@@ -84,64 +84,75 @@ class AuthProvider with ChangeNotifier {
   }
 
 
+  // Future<bool> verifySignup(
+  //     BuildContext context, VerifyOtpRequest verifyRequest, {
+  //       required String firstname,
+  //       required String lastname,
+  //       required String email,
+  //       required String username,
+  //       required String password,
+  //       required String role,
+  //       required String enterCode,
+  //     }) async {
+  //   _isLoading = true;
+  //   notifyListeners();
+  //
+  //   try {
+  //     final request = VerifyOtpRequest(
+  //       firstname: firstname,
+  //       lastname: lastname,
+  //       email: email,
+  //       username: username,
+  //       password: password,
+  //       role: role,
+  //       enterCode: enterCode,
+  //     );
+  //
+  //     debugPrint("Final VerifyOtpRequest: ${request.toJson()}");
+  //
+  //     ApiClient apiClient = await RetrofitClient.getApiClient();
+  //     final response = await apiClient.verifyOtp(request);
+  //
+  //     debugPrint("VerifySignup Raw Response: $response");
+  //
+  //     if (response is Map<String, dynamic>) {
+  //       if (response["message"]?.toString().toLowerCase().contains("success") ?? false) {
+  //         debugPrint("User registered successfully with token: ${response["token"]}");
+  //         return true;
+  //       }
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     debugPrint("VerifySignup Error: $e");
+  //     return false;
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
+
   Future<bool> verifySignup(
-      BuildContext context, {
-        required String name,
-        required String email,
-        required String enterCode,
-        required String username,
-        required String password,
-        required String location,
-        required String role,
-      }) async {
+      BuildContext context,
+      VerifyOtpRequest verifyRequest,
+      ) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final isInternetAvailable = await CommUtils.isInternetAvailable;
-      if (!isInternetAvailable) {
-        await CommDialogs.showCustomDialogBox(
-          context: context,
-          title: "No Internet",
-          message: "Please check your connection.",
-          onOkPressed: () => Navigator.pop(context),
-        );
-        return false;
-      }
-
-      final request = VerifyOtpRequest(
-        name: name,
-        email: email,
-        role: role,
-        enterCode: enterCode,
-        username: username,
-        password: password,
-        location: location,
-      );
-
-      debugPrint("Final VerifyOtpRequest: ${request.toJson()}");
+      debugPrint("Final VerifyOtpRequest: ${verifyRequest.toJson()}");
 
       ApiClient apiClient = await RetrofitClient.getApiClient();
-      final response = await apiClient.verifyOtp(request);
+      final response = await apiClient.verifyOtp(verifyRequest);
 
       debugPrint("VerifySignup Raw Response: $response");
 
-      // ✅ Case 1: If response is JwtToken
-      if (response is JwtToken && response.access_token.isNotEmpty) {
-        return true;
-      }
-
-      else if (response is Map<String, dynamic>) {
-        final success = response["success"] as bool? ?? false;
-        final status = response["status"]?.toString().toLowerCase();
-        final message = response["message"]?.toString().toLowerCase();
-
-        if (success || status == "ok" || (message?.contains("success") ?? false)) {
+      if (response is Map<String, dynamic>) {
+        if (response["message"]?.toString().toLowerCase().contains("success") ?? false) {
+          debugPrint("User registered successfully with token: ${response["token"]}");
           return true;
         }
       }
 
-      // ❌ If neither token nor success JSON
       return false;
     } catch (e) {
       debugPrint("VerifySignup Error: $e");
@@ -151,6 +162,9 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
 
 
 

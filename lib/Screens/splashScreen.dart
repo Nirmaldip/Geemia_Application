@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 
-import 'enter_name_screen.dart';
+import 'Authentication/enter_name_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -197,8 +197,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EnterNameScreen(
-                      email: widget.email,   // Dynamic email passed from Splash
-                      otpCode: widget.otpCode, // Dynamic OTP passed from Splash
+
                     ),
                   ),
                 );
