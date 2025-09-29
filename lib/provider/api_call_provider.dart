@@ -163,13 +163,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-
-
-
-
-
-
-
   Future<bool> authenticateUser(BuildContext context, UserData userData) async {
     bool isInternetAvailable = await CommUtils.isInternetAvailable;
     if (isInternetAvailable) {

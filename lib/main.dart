@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/dashboard.dart';
 import 'package:geemia_app/provider/api_call_provider.dart';
+import 'package:geemia_app/provider/job_provider.dart';
 import 'package:geemia_app/provider/location_provider.dart';
 import 'package:geemia_app/services/place_services.dart';
 // import 'package:geemia_app/provider/location_provider.dart';
@@ -11,7 +13,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-
+        ChangeNotifierProvider(create: (_) => JobProvider()),
         ChangeNotifierProvider(create: (_) => LocationProvider(),),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
 
@@ -26,7 +28,7 @@ class GeemiaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: Dashboard(),
     );
   }
 }

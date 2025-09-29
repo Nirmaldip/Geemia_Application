@@ -1,3 +1,5 @@
+import 'package:geemia_app/model/category.dart';
+import 'package:geemia_app/model/job_model.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
@@ -28,10 +30,23 @@ abstract class ApiClient {
   @POST("signup/send-code")
   Future<ServerResponse> sendCode(@Body() Map<String, String> body);
 
-
   @POST("signup/verify")
   Future<dynamic> verifyOtp(@Body() VerifyOtpRequest request);
 
+  @POST("jobs")
+  Future<Job> postJob(@Body() Job job);
+
+  @POST("categories")
+  Future<dynamic> createCategory(@Body() Map<String, dynamic> body);
+
+  // @GET("categories")
+  // Future<List<dynamic>> getCategories();
+  @GET("categories")
+  Future<List<dynamic>> getCategories();
+
+
+// @GET("categories")
+  // Future<List<Category>> getCategories();
 
 // @POST("signup/complete")
   // Future<JwtToken?> completeSignup(@Body() VerifyOtpRequest request);

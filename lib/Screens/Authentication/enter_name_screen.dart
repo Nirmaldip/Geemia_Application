@@ -231,6 +231,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:geemia_app/Screens/Authentication/singup_password.dart';
 import 'package:geemia_app/Screens/Authentication/user_name.dart';
 
 class EnterNameScreen extends StatefulWidget {
@@ -287,7 +288,18 @@ class _EnterNameScreenState extends State<EnterNameScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 16),
                     child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () =>  Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(
+                            // firstname: widget.firstname,
+                            // lastname: widget.lastname,
+                            // username: widget.username,
+                            // role: widget.role,
+                            // password: password,
+                          ),
+                        ),
+                      ),
                       child: const Text(
                         'Log In',
                         style: TextStyle(
