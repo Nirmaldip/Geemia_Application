@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geemia_app/Screens/message_house_screen.dart';
-import 'message_screen.dart';
+import 'IHookUp_Screen/message_screen.dart';
 
 class ChatsScreenHousing extends StatelessWidget {
   const ChatsScreenHousing({super.key});

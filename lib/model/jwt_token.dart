@@ -34,88 +34,88 @@ class JwtToken{
     return 'JwtToken{access_token: $access_token, refreshToken: $refresh_token}';
   }
 
-  Future<JwtToken?> tokenTestAppRequest(BuildContext context) async {
-    bool isInternetAvailable = await CommUtils.isInternetAvailable;
-    if (isInternetAvailable) {
-      // CommUtils.printLog(4610,'$signInRequest');
-      ApiClient apiClient = await RetrofitClient.getAuthApiClient(context);
-      apiClient.testTokenAuthentication().then((res) {
-        SavedSPref.setStringData(SavedSPref.accessToken, res!.access_token);
-        SavedSPref.setStringData(SavedSPref.refreshToken, res.refresh_token);
-        SavedSPref.setUserloginData(res.refresh_token);
-        CommUtils.printLog(226, '${res.refresh_token}');
-        Navigator.pop(context);
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) =>  HomeFragment(changeTab, user, Function)));
-      }).catchError((e) {
-        CommUtils.printLog(4611, "Error $e");
-        // final serverError = ServerError.withError(error: e,context: context);
-        final responseFormat = ServerError.getError(error: e, context: context);
-        CommUtils.printLog(4612, "ServerError $responseFormat");
-        // if (responseFormat != null) {
-        //   if (responseFormat.failedValue == ErrorConstant.noUserFound) {
-        //     showDialog(
-        //       context: context,
-        //       builder: (context) => AlertMessageDialog(
-        //         title: responseFormat.failedReason!,
-        //         message: userNotFound,
-        //         buttonTitle: 'Register',
-        //         assetImage: Icons.cancel_outlined,
-        //         onBtnPressed: () {
-        //           Navigator.pop(context); //close the dialog
-        //           Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) => Registration(
-        //                     email: email,
-        //                     changeTab: changeTab,
-        //                   )));
-        //         },
-        //       ),
-        //       barrierDismissible: false,
-        //     );
-        //   } else if (responseFormat.failedValue == ErrorConstant.badCredentials) {
-        //     showDialog(
-        //       context: context,
-        //       builder: (context) => AlertMessageDialog(
-        //         title: responseFormat.failedReason!,
-        //         message: badCredentials,
-        //         buttonTitle: 'Forget Password',
-        //         assetImage: Icons.cancel_outlined,
-        //         onBtnPressed: () async {
-        //           Navigator.pop(context);//close dialog
-        //           // await SavedSharedPref.setStringData(
-        //           // SavedSharedPref.availableEmail, email);
-        //           // Navigator.pop(context, email);
-        //           Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword(email: email,changeTab: changeTab,)));
-        //         },
-        //       ),
-        //       barrierDismissible: false,
-        //     );
-        //   } else if(responseFormat.failedValue == ErrorConstant.accountLocked  || responseFormat.failedValue == ErrorConstant.inActive){
-        //     showDialog(
-        //       context: context,
-        //       builder: (context) => AlertMessageDialog(
-        //         title: responseFormat.failedReason!,
-        //         message: '',
-        //         buttonTitle: 'ok',
-        //         assetImage: Icons.cancel_outlined,
-        //         onBtnPressed: () async {
-        //           Navigator.pop(context);//close dialog
-        //           // await SavedSharedPref.setStringData(
-        //           // SavedSharedPref.availableEmail, email);
-        //           // Navigator.pop(context, email);
-        //         },
-        //       ),
-        //       barrierDismissible: false,
-        //     );
-        //   }
-        // }
-        // CommWidget.showWhiteToast(serverError.getErrorMessage());
-        return null;
-      });
-
-    }
-    return null;
-  }
+  // Future<JwtToken?> tokenTestAppRequest(BuildContext context) async {
+  //   bool isInternetAvailable = await CommUtils.isInternetAvailable;
+  //   if (isInternetAvailable) {
+  //     // CommUtils.printLog(4610,'$signInRequest');
+  //     ApiClient apiClient = await RetrofitClient.getAuthApiClient(context);
+  //     apiClient.testTokenAuthentication().then((res) {
+  //       SavedSPref.setStringData(SavedSPref.accessToken, res!.access_token);
+  //       SavedSPref.setStringData(SavedSPref.refreshToken, res.refresh_token);
+  //       SavedSPref.setUserloginData(res.refresh_token);
+  //       CommUtils.printLog(226, '${res.refresh_token}');
+  //       Navigator.pop(context);
+  //       // Navigator.push(
+  //       //     context, MaterialPageRoute(builder: (context) =>  HomeFragment(changeTab, user, Function)));
+  //     }).catchError((e) {
+  //       CommUtils.printLog(4611, "Error $e");
+  //       // final serverError = ServerError.withError(error: e,context: context);
+  //       final responseFormat = ServerError.getError(error: e, context: context);
+  //       CommUtils.printLog(4612, "ServerError $responseFormat");
+  //       // if (responseFormat != null) {
+  //       //   if (responseFormat.failedValue == ErrorConstant.noUserFound) {
+  //       //     showDialog(
+  //       //       context: context,
+  //       //       builder: (context) => AlertMessageDialog(
+  //       //         title: responseFormat.failedReason!,
+  //       //         message: userNotFound,
+  //       //         buttonTitle: 'Register',
+  //       //         assetImage: Icons.cancel_outlined,
+  //       //         onBtnPressed: () {
+  //       //           Navigator.pop(context); //close the dialog
+  //       //           Navigator.push(
+  //       //               context,
+  //       //               MaterialPageRoute(
+  //       //                   builder: (context) => Registration(
+  //       //                     email: email,
+  //       //                     changeTab: changeTab,
+  //       //                   )));
+  //       //         },
+  //       //       ),
+  //       //       barrierDismissible: false,
+  //       //     );
+  //       //   } else if (responseFormat.failedValue == ErrorConstant.badCredentials) {
+  //       //     showDialog(
+  //       //       context: context,
+  //       //       builder: (context) => AlertMessageDialog(
+  //       //         title: responseFormat.failedReason!,
+  //       //         message: badCredentials,
+  //       //         buttonTitle: 'Forget Password',
+  //       //         assetImage: Icons.cancel_outlined,
+  //       //         onBtnPressed: () async {
+  //       //           Navigator.pop(context);//close dialog
+  //       //           // await SavedSharedPref.setStringData(
+  //       //           // SavedSharedPref.availableEmail, email);
+  //       //           // Navigator.pop(context, email);
+  //       //           Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword(email: email,changeTab: changeTab,)));
+  //       //         },
+  //       //       ),
+  //       //       barrierDismissible: false,
+  //       //     );
+  //       //   } else if(responseFormat.failedValue == ErrorConstant.accountLocked  || responseFormat.failedValue == ErrorConstant.inActive){
+  //       //     showDialog(
+  //       //       context: context,
+  //       //       builder: (context) => AlertMessageDialog(
+  //       //         title: responseFormat.failedReason!,
+  //       //         message: '',
+  //       //         buttonTitle: 'ok',
+  //       //         assetImage: Icons.cancel_outlined,
+  //       //         onBtnPressed: () async {
+  //       //           Navigator.pop(context);//close dialog
+  //       //           // await SavedSharedPref.setStringData(
+  //       //           // SavedSharedPref.availableEmail, email);
+  //       //           // Navigator.pop(context, email);
+  //       //         },
+  //       //       ),
+  //       //       barrierDismissible: false,
+  //       //     );
+  //       //   }
+  //       // }
+  //       // CommWidget.showWhiteToast(serverError.getErrorMessage());
+  //       return null;
+  //     });
+  //
+  //   }
+  //   return null;
+  // }
 }

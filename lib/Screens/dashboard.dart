@@ -5,9 +5,9 @@ import 'package:geemia_app/Screens/job_screen.dart';
 import 'package:geemia_app/Screens/market_feed_screen.dart';
 import 'package:geemia_app/Screens/social_media_screen.dart';
 
-import 'hooke_up_screen.dart' show IHookupScreen, SwipeScreen;
+import 'IHookUp_Screen/hooke_up_screen.dart' show IHookupScreen, SwipeScreen;
 import 'menu_screen.dart';
-import 'message_screen.dart' show ConnectionScreen, MessagesScreen;
+import 'IHookUp_Screen/message_screen.dart' show ConnectionScreen, MessagesScreen;
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});

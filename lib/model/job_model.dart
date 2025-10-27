@@ -16,8 +16,21 @@ class Job {
     required this.type,
     required this.salary,
   });
-
-  Map<String, dynamic> toJson() {
+  factory Job.fromJson(Map<String, dynamic> json) {
+    return Job(
+      // The keys in the Map (like 'categoryId') must match the keys in your JSON
+      // We use 'as int' and 'as String' to cast the dynamic values safely
+      // and the null-aware operator '?? 0' or '?? '' ' for safety
+      categoryId: json['categoryId'] as int,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      location: json['location'] as String,
+      company: json['company'] as String,
+      type: json['type'] as String,
+      salary: json['salary'] as int,
+    );
+  }
+        Map<String, dynamic> toJson() {
     return {
       "category_id": categoryId,
       "title": title,
